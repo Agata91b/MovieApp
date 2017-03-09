@@ -13,5 +13,6 @@ import retrofit2.http.Query;
 public interface SearchService {
 
     @GET("/")
-    Observable<MovieContainer> search (@Query("s") String title);
+    Observable<MovieContainer> search (@Query("s") String title, @Query("y") String year,
+                                       @Query("type") String type);
 }

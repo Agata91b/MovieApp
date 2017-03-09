@@ -28,8 +28,10 @@ public class ListingPresenter extends Presenter<ListingActivity> {
 
     }
 
-    public Observable<MovieContainer> getDataAsync(String title) {
-        return retrofit.create(SearchService.class).search(title);
+    public Observable<MovieContainer> getDataAsync(String title, int year, String type) {
+        String stringYear = year == ListingActivity.NO_YEAR_SELECTED ? null : String.valueOf(year);
+        return retrofit.create(SearchService.class).search(title,
+                stringYear, type);
 
     }
 }

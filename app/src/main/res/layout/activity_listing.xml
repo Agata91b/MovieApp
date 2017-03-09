@@ -5,6 +5,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ViewFlipper
         android:id="@+id/flipper_view"
         android:layout_width="match_parent"
@@ -16,17 +17,33 @@
             android:layout_height="wrap_content" />
 
 
-    <android.support.v7.widget.RecyclerView
-        app:layoutManager="LinearLayoutManager"
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager" />
 
-    <ImageView
-        android:src="@drawable/ic_no_internet_image"
-        android:id="@+id/no_internet_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/no_internet_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_no_internet_image" />
+
+        <FrameLayout
+            android:id="@+id/no_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_red_light">
+
+            <TextView
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="O nieee !!! Nic nie znalazłem"/>
+
+        </FrameLayout>
 
     </ViewFlipper>
 </RelativeLayout>

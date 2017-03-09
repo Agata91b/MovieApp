@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
@@ -20,6 +21,9 @@ import static io.reactivex.schedulers.Schedulers.*;
 @RequiresPresenter(ListingPresenter.class)
 public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> {
     private static final String SEARCH_TITLE = "search_title";
+    private static final String SEARCH_YEAR = "search_year";
+    public static final  int NO_YEAR_SELECTED = -1;
+    private static final String SEARCH_TYPE = "search_type";
     private MoviesListAdapter adapter;
 
     @BindView(R.id.flipper_view)
@@ -31,7 +35,11 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
     @BindView(R.id.recycler_view)
      RecyclerView recyclerView;
 
+    @BindView(R.id.no_results)
+    FrameLayout noResults;
 
+    String title;
+    int year;
 
 //    public void setDataOnUiThread(MovieContainer result, boolean isProblemWithInternetConnection) {
 //        runOnUiThread(() -> {
@@ -51,15 +59,18 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
         setContentView(R.layout.activity_listing);
 
         ButterKnife.bind(this);
-        String title = getIntent().getStringExtra(SEARCH_TITLE);
+        title = getIntent().getStringExtra(SEARCH_TITLE);
+        year = getIntent().getIntExtra(SEARCH_YEAR, NO_YEAR_SELECTED);
+
+        String type = getIntent().getStringExtra(SEARCH_TYPE);
         adapter = new MoviesListAdapter();
         recyclerView.setAdapter(adapter);
 
 
-        getPresenter().getDataAsync(title)
+        getPresenter().getDataAsync(title, year, type)
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribe(this::succes, this::error);
+                .subscribe(this::success, this::error);
 
     }
 
@@ -71,14 +82,20 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
         viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(noInternetImage));
     }
 
-    private void succes(MovieContainer movieContainer) {
-        viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(recyclerView));
-        adapter.setItems(movieContainer.getItems());
+    private void success(MovieContainer movieContainer) {
+        if("false".equalsIgnoreCase(movieContainer.getResponse())){
+            viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(noResults));
+        }else {
+            viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(recyclerView));
+            adapter.setItems(movieContainer.getItems());
+        }
     }
 
-    public static Intent createIntent(Context context, String title) {
+    public static Intent createIntent(Context context, String title, int year, String type) {
         Intent intent = new Intent(context, ListingActivity.class);
         intent.putExtra(SEARCH_TITLE, title);
+        intent.putExtra(SEARCH_YEAR, year);
+        intent.putExtra(SEARCH_TYPE, type);
         return intent;
     }
 

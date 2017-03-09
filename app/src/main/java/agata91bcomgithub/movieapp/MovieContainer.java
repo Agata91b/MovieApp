@@ -13,6 +13,7 @@ public class MovieContainer {
     @SerializedName("Search")
     private List<MovieItem> items;
     private String totalResults;
+    @SerializedName("Response")
     private String response;
 
     public List<MovieItem> getItems() {
