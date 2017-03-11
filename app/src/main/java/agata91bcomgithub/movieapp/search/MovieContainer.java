@@ -14,6 +14,8 @@ public class MovieContainer {
 
     @SerializedName("Search")
     private List<MovieItem> items;
+
+
     private String totalResults;
     @SerializedName("Response")
     private String response;
@@ -28,5 +30,13 @@ public class MovieContainer {
 
     public String getResponse() {
         return response;
+    }
+
+    public void setItems(List<MovieItem> items) {
+        this.items = items;
+    }
+
+    public void setTotalResults(String totalResults) {
+        this.totalResults = totalResults;
     }
 }

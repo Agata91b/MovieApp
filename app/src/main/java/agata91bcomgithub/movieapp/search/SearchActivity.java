@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity {
         numberPicker.setWrapSelectorWheel(true);
 
         adapter = new PosterRecyclerViewAdapter();
-        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
         posterHeaderRecyclerView.setLayoutManager(layoutManager);
         posterHeaderRecyclerView.setHasFixedSize(true);
         posterHeaderRecyclerView.setAdapter(adapter);
@@ -92,7 +92,7 @@ public class SearchActivity extends AppCompatActivity {
         RetrofitProvider retrofitProvider = (RetrofitProvider) getApplication();
         Retrofit retrofit = retrofitProvider.provideRetrofit();
         SearchService searchService = retrofit.create(SearchService.class);
-        searchService.search("a*" , "2016", null )
+        searchService.search(1, "a*" , "2016", null )
                         .flatMap(searchResult -> Observable.fromIterable(searchResult.getItems())
                         .map(MovieItem::getPoster))
                         .filter(posterUrl -> !"N/A".equalsIgnoreCase(posterUrl))

@@ -46,6 +46,11 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.My
         notifyDataSetChanged();
     }
 
+    public void addItems(List<MovieItem> items) {
+        this.items.addAll(items);
+        notifyDataSetChanged();
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView poster;
