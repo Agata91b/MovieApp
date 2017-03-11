@@ -9,9 +9,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="agata91bcomgithub.movieapp.SearchActivity">
+    tools:context="agata91bcomgithub.movieapp.search.SearchActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/header_poster"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
 
     <android.support.design.widget.TextInputLayout
+        android:layout_below="@+id/header_poster"
         android:id="@+id/text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +25,7 @@
         android:layout_toLeftOf="@+id/search_button">
 
         <android.support.design.widget.TextInputEditText
+
             android:id="@+id/edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,6 +34,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <ImageButton
+        android:layout_below="@+id/header_poster"
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

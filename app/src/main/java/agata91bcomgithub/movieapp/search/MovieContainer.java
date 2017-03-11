@@ -1,8 +1,10 @@
-package agata91bcomgithub.movieapp;
+package agata91bcomgithub.movieapp.search;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import agata91bcomgithub.movieapp.listing.MovieItem;
 
 /**
  * Created by RENT on 2017-03-07.

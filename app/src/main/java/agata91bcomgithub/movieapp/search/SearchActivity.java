@@ -1,27 +1,43 @@
-package agata91bcomgithub.movieapp;
+package agata91bcomgithub.movieapp.search;
 
-import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
+import com.azoft.carousellayoutmanager.ItemTransformation;
+
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import agata91bcomgithub.movieapp.R;
+import agata91bcomgithub.movieapp.RetrofitProvider;
+import agata91bcomgithub.movieapp.listing.ListingActivity;
+import agata91bcomgithub.movieapp.listing.MovieItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -48,7 +64,9 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.type_checkbox)
     CheckBox typeChecbox;
 
-
+    @BindView(R.id.header_poster)
+    RecyclerView posterHeaderRecyclerView;
+    private PosterRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +74,41 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.search_main);
         ButterKnife.bind(this);
 
+
         Calendar calender = Calendar.getInstance();
         int year = calender.get(Calendar.YEAR);
         numberPicker.setMinValue(1950);
         numberPicker.setMaxValue(year);
         numberPicker.setWrapSelectorWheel(true);
+
+        adapter = new PosterRecyclerViewAdapter();
+        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+        posterHeaderRecyclerView.setLayoutManager(layoutManager);
+        posterHeaderRecyclerView.setHasFixedSize(true);
+        posterHeaderRecyclerView.setAdapter(adapter);
+        posterHeaderRecyclerView.addOnScrollListener(new CenterScrollListener());
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+
+        RetrofitProvider retrofitProvider = (RetrofitProvider) getApplication();
+        Retrofit retrofit = retrofitProvider.provideRetrofit();
+        SearchService searchService = retrofit.create(SearchService.class);
+        searchService.search("a*" , "2016", null )
+                        .flatMap(searchResult -> Observable.fromIterable(searchResult.getItems())
+                        .map(MovieItem::getPoster))
+                        .filter(posterUrl -> !"N/A".equalsIgnoreCase(posterUrl))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .toList()
+                        .subscribe(this::success, this::error);
+
+
+    }
+
+    private void success(List<String> list){
+        adapter.setUrls(list);
+    }
+
+    private void error(Throwable throwable){
 
     }
 
@@ -90,6 +138,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
     }
+
 
 
 }

@@ -1,4 +1,4 @@
-package agata91bcomgithub.movieapp;
+package agata91bcomgithub.movieapp.listing;
 
 import com.google.gson.annotations.SerializedName;
 

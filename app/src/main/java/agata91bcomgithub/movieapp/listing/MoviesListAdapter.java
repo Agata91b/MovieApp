@@ -1,4 +1,4 @@
-package agata91bcomgithub.movieapp;
+package agata91bcomgithub.movieapp.listing;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import agata91bcomgithub.movieapp.R;
 
 /**
  * Created by RENT on 2017-03-08.

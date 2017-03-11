@@ -1,8 +1,6 @@
-package agata91bcomgithub.movieapp;
+package agata91bcomgithub.movieapp.search;
 
 import io.reactivex.Observable;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 

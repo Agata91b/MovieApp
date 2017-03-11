@@ -1,16 +1,16 @@
-package agata91bcomgithub.movieapp;
+package agata91bcomgithub.movieapp.listing;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
+import agata91bcomgithub.movieapp.RetrofitProvider;
+import agata91bcomgithub.movieapp.search.MovieContainer;
+import agata91bcomgithub.movieapp.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nucleus.factory.RequiresPresenter;
@@ -59,6 +59,12 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
         setContentView(R.layout.activity_listing);
 
         ButterKnife.bind(this);
+
+        if(savedInstanceState == null) {
+            RetrofitProvider retrofitProvider = (RetrofitProvider) getApplication();
+            getPresenter().setRetrofit(retrofitProvider.provideRetrofit());
+
+        }
         title = getIntent().getStringExtra(SEARCH_TITLE);
         year = getIntent().getIntExtra(SEARCH_YEAR, NO_YEAR_SELECTED);
 
