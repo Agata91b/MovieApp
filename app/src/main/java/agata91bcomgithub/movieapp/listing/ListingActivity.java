@@ -10,9 +10,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import agata91bcomgithub.movieapp.RetrofitProvider;
+import agata91bcomgithub.movieapp.details.DetailsActivity;
 import agata91bcomgithub.movieapp.search.MovieContainer;
 import agata91bcomgithub.movieapp.R;
 import agata91bcomgithub.movieapp.search.SearchService;
@@ -26,7 +28,7 @@ import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.*;
 
 @RequiresPresenter(ListingPresenter.class)
-public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> implements CurrentItemListener, ShowOrHideCounter{
+public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> implements CurrentItemListener, ShowOrHideCounter, OnMovieDetailsClickListener {
     private static final String SEARCH_TITLE = "search_title";
     private static final String SEARCH_YEAR = "search_year";
     public static final  int NO_YEAR_SELECTED = -1;
@@ -83,9 +85,10 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
         }
         title = getIntent().getStringExtra(SEARCH_TITLE);
         year = getIntent().getIntExtra(SEARCH_YEAR, NO_YEAR_SELECTED);
-
         type = getIntent().getStringExtra(SEARCH_TYPE);
+
         adapter = new MoviesListAdapter();
+        adapter.setOnMovieDetailsClickListener(this);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -152,5 +155,11 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
     @Override
     public void hideCounter() {
         counter.animate().translationX(counter.getWidth() * 2).start();
+    }
+
+    @Override
+    public void onMovieDetailsClick(String imdbID) {
+        startActivity(DetailsActivity.createIntent(this, imdbID));
+
     }
 }

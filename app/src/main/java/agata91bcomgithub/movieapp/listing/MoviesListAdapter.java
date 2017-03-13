@@ -1,5 +1,6 @@
 package agata91bcomgithub.movieapp.listing;
 
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import agata91bcomgithub.movieapp.R;
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MyViewHolder> {
 
     private List<MovieItem> items = Collections.emptyList();
+    private OnMovieDetailsClickListener onMovieDetailsClickListener;
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layout =  LayoutInflater.from(parent.getContext())
@@ -34,6 +36,11 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.My
                 .into(holder.poster);
         holder.titleAndYear.setText(movieItem.getTitle() + " (" + movieItem.getYear() + ")");
         holder.type.setText("typ: " + movieItem.getType());
+        holder.itemView.setOnClickListener(v -> {
+            if(onMovieDetailsClickListener !=null){
+                onMovieDetailsClickListener.onMovieDetailsClick(movieItem.getImdbID());
+            }
+        });
     }
 
     @Override
@@ -46,6 +53,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.My
         notifyDataSetChanged();
     }
 
+
     public void addItems(List<MovieItem> items) {
         this.items.addAll(items);
         notifyDataSetChanged();
@@ -53,15 +61,20 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.My
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
+        View itemView;
         ImageView poster;
         TextView titleAndYear;
         TextView type;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             poster = (ImageView) itemView.findViewById(R.id.poster);
             titleAndYear = (TextView)itemView.findViewById(R.id.title_and_year);
             type = (TextView)itemView.findViewById(R.id.type);
         }
+    }
+    public void setOnMovieDetailsClickListener(OnMovieDetailsClickListener onMovieDetailsClickListener) {
+        this.onMovieDetailsClickListener = onMovieDetailsClickListener;
     }
 }

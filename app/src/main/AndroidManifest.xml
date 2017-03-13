@@ -20,8 +20,12 @@
         </activity>
         <activity
             android:name=".listing.ListingActivity"
-            android:label="MovieList">
-            </activity>
+            android:label="MovieList" />
+        <activity
+            android:name=".details.DetailsActivity"
+            android:label="Movie Details"
+             />
+
     </application>
 
 </manifest>
