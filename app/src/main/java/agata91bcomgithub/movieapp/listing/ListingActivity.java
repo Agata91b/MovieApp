@@ -3,6 +3,7 @@ package agata91bcomgithub.movieapp.listing;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -47,6 +48,9 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
     @BindView(R.id.counter)
     TextView counter;
 
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     String title;
     int year;
     String type;
@@ -90,15 +94,22 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
         endlessScrollListener.setCurrentItemListener(this);
         endlessScrollListener.setShowOrHideCounter(this);
 
-        getPresenter().getDataAsync(title, year, type)
-                .subscribeOn(io())
-                .observeOn(mainThread())
-                .subscribe(this::success, this::error);
+        swipeRefreshLayout.setOnRefreshListener(() -> startLoading(title, year, type));
+
+        startLoading(title, year, type);
         counter.setTranslationX(counter.getWidth() * 2);
 
     }
 
+    private void startLoading(String title,  int year, String type) {
+        getPresenter().getDataAsync(title, year, type)
+                .subscribeOn(io())
+                .observeOn(mainThread())
+                .subscribe(this::success, this::error);
+    }
+
     private void error(Throwable throwable) {
+        swipeRefreshLayout.setRefreshing(false);
         viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(noInternetImage));
     }
 
@@ -109,11 +120,11 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
     }
 
     private void success(MovieContainer movieContainer) {
-
+        swipeRefreshLayout.setRefreshing(false);
         if("false".equalsIgnoreCase(movieContainer.getResponse())){
             viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(noResults));
         }else {
-            viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(recyclerView));
+            viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(swipeRefreshLayout));
             adapter.setItems(movieContainer.getItems());
             endlessScrollListener.setTotalsItemsNumber(Integer.parseInt(movieContainer.getTotalResults()));
         }
