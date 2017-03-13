@@ -49,6 +49,8 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
 
     String title;
     int year;
+    String type;
+
     private EndlessScrollListener endlessScrollListener;
 
 //    public void setDataOnUiThread(MovieContainer result, boolean isProblemWithInternetConnection) {
@@ -78,7 +80,7 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
         title = getIntent().getStringExtra(SEARCH_TITLE);
         year = getIntent().getIntExtra(SEARCH_YEAR, NO_YEAR_SELECTED);
 
-        String type = getIntent().getStringExtra(SEARCH_TYPE);
+        type = getIntent().getStringExtra(SEARCH_TYPE);
         adapter = new MoviesListAdapter();
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

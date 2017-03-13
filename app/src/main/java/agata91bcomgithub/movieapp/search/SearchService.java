@@ -12,5 +12,5 @@ public interface SearchService {
 
     @GET("/")
     Observable<MovieContainer> search ( @Query("page") int page,@Query("s") String title, @Query("y") String year,
-                                       @Query("type") String typee);
+                                       @Query("type") String type);
 }
