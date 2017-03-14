@@ -19,6 +19,8 @@ import io.reactivex.schedulers.Schedulers;
 import nucleus.factory.RequiresPresenter;
 import nucleus.view.NucleusAppCompatActivity;
 
+import static java.lang.String.valueOf;
+
 @RequiresPresenter(DetailsPresenter.class)
 public class DetailsActivity extends NucleusAppCompatActivity<DetailsPresenter> {
     private static final String ID_KEY ="id_key";
@@ -40,6 +42,8 @@ public class DetailsActivity extends NucleusAppCompatActivity<DetailsPresenter> 
 
 
         ButterKnife.bind(this);
+
+
         
         RetrofitProvider retrofitProvider = (RetrofitProvider) getApplication();
         getPresenter().setRetrofit(retrofitProvider.provideRetrofit());
@@ -61,8 +65,6 @@ public class DetailsActivity extends NucleusAppCompatActivity<DetailsPresenter> 
 
     public void success(MovieDetails movieDetails){
         Glide.with(this).load(movieDetails.getPoster()).into(poster);
-
-
 
     }
     public void error(Throwable throwable){

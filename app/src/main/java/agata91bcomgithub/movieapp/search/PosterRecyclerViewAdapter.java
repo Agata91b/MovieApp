@@ -1,5 +1,6 @@
 package agata91bcomgithub.movieapp.search;
 
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import agata91bcomgithub.movieapp.R;
+import agata91bcomgithub.movieapp.listing.OnMovieDetailsClickListener;
 
 import static butterknife.ButterKnife.*;
 
@@ -21,7 +23,13 @@ import static butterknife.ButterKnife.*;
 
 public class PosterRecyclerViewAdapter extends RecyclerView.Adapter<PosterRecyclerViewAdapter.ViewHolder> {
 
-    private List<String> urls = Collections.emptyList();
+
+    private List<SimpleMovieItem> simpleMovieItems = Collections.emptyList();
+    private OnMovieDetailsClickListener onMovieDetailsClikListener;
+
+    public void setOnMovieDetailsClikListener(OnMovieDetailsClickListener onMovieDetailsClikListener) {
+        this.onMovieDetailsClikListener = onMovieDetailsClikListener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,15 +40,28 @@ public class PosterRecyclerViewAdapter extends RecyclerView.Adapter<PosterRecycl
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Glide.with(holder.posterImageView.getContext()).load(urls.get(position))
+        Glide.with(holder.posterImageView.getContext()).load(simpleMovieItems.get(position).getPoster())
                 .into(holder.posterImageView);
+        holder.posterImageView.setOnClickListener(v -> {
+            if(onMovieDetailsClikListener!= null){
+                onMovieDetailsClikListener.onMovieDetailsClick(simpleMovieItems.get(position).getImdbID());
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        return urls.size();
+        return simpleMovieItems.size();
     }
+
+    public void setSimpleMovieItems(List<SimpleMovieItem> simpleMovieItems) {
+        this.simpleMovieItems = simpleMovieItems;
+        notifyDataSetChanged();
+    }
+
+
+
 
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView posterImageView;
@@ -51,8 +72,5 @@ public class PosterRecyclerViewAdapter extends RecyclerView.Adapter<PosterRecycl
 
         }
     }
-    public  void setUrls(List<String> urls){
-        this.urls = urls;
-        notifyDataSetChanged();
-    }
+
 }
