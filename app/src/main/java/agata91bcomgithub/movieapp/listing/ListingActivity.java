@@ -105,10 +105,8 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
     }
 
     private void startLoading(String title,  int year, String type) {
-        getPresenter().getDataAsync(title, year, type)
-                .subscribeOn(io())
-                .observeOn(mainThread())
-                .subscribe(this::success, this::error);
+        getPresenter().startLoadingItems(title, year, type)
+
     }
 
     private void error(Throwable throwable) {
@@ -122,14 +120,14 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
         endlessScrollListener.setTotalsItemsNumber(Integer.parseInt(movieContainer.getTotalResults()));
     }
 
-    private void success(MovieContainer movieContainer) {
+    private void success(ResultAggregator resultAggregator) {
         swipeRefreshLayout.setRefreshing(false);
-        if("false".equalsIgnoreCase(movieContainer.getResponse())){
+        if("false".equalsIgnoreCase(resultAggregator.getResponse())){
             viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(noResults));
         }else {
             viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(swipeRefreshLayout));
-            adapter.setItems(movieContainer.getItems());
-            endlessScrollListener.setTotalsItemsNumber(Integer.parseInt(movieContainer.getTotalResults()));
+            adapter.setItems(resultAggregator.getMovieDetails());
+            endlessScrollListener.setTotalsItemsNumber(resultAggregator.getTotalItemsReusult());
         }
     }
 
@@ -161,5 +159,9 @@ public class ListingActivity extends NucleusAppCompatActivity<ListingPresenter> 
     public void onMovieDetailsClick(String imdbID) {
         startActivity(DetailsActivity.createIntent(this, imdbID));
 
+    }
+
+    public void setNewAggregatorResult(ResultAggregator newAggregatorResult) {
+        success(newAggregatorResult);
     }
 }

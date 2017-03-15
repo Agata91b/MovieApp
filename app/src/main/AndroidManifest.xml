@@ -23,9 +23,10 @@
             android:label="MovieList" />
         <activity
             android:name=".details.DetailsActivity"
-            android:label="Movie Details"
-             />
-
+            android:label="Movie Details" />
+        <activity android:name=".details.gallery.GalleryActivity"
+            android:label="Movie Gallery"
+            ></activity>
     </application>
 
 </manifest>
